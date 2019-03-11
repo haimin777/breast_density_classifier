@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy 
 from scipy import misc 
 
-import models
+import breast_density_classifier.models as models
 
 def optimistic_restore(session, save_file):
 
