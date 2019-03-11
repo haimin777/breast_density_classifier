@@ -1,4 +1,4 @@
-import layers_tf as layers
+import breast_density_classifier.layers_tf as layers
 
 
 def baseline(x, parameters, nodropout_probability=None, Gaussian_noise_std=None):
