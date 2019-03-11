@@ -1,8 +1,8 @@
 import argparse
 import tensorflow as tf
 
-import models_tf as models
-import utils
+import breast_density_classifier.models_tf as models
+import breast_density_classifier.utils
 
 
 def optimistic_restore(session, save_file):
