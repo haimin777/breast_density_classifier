@@ -121,7 +121,7 @@ def load_dcm_images(image_path):
 
     
 
-    image = image.astype(np.float32)
+    #image = image.astype(np.float32)
     normalize_single_image(image)
     print 'normilized', np.amax(image)
     image = np.expand_dims(image, axis=0)
