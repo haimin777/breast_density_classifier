@@ -65,7 +65,7 @@ def inference(parameters, verbose=True):
         else:
             raise RuntimeError(parameters['device_type'])
             
-    with tf.Session(config=session_config) as session:
+        with tf.Session(config=session_config) as session:
             session.run(tf.global_variables_initializer())
 
             # loads the pre-trained parameters if it's provided
