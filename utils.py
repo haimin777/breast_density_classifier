@@ -65,7 +65,7 @@ def normalize_single_image(image):
     image /= np.std(image)
     
     
-def segment_breast(img, low_int_threshold=.05, crop=False):
+def segment_breast(img, low_int_threshold=.05, crop=True):
         '''Perform breast segmentation
         Args:
             low_int_threshold([float or int]): Low intensity threshold to 
