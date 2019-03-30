@@ -108,7 +108,7 @@ def segment_breast(img, low_int_threshold=.05, crop=True):
         return img_breast_only, (x,y,w,h)
     
     
-def load_dcm_images(image_path):
+def load_dcm_images(image_path, crop):
     """
     Function that loads and preprocess input images
     :param image_path: base path to image
@@ -116,7 +116,7 @@ def load_dcm_images(image_path):
     :return: Batch x Height x Width x Channels array
     """
     image = pyd.dcmread(image_path).pixel_array
-    image = segment_breast(image)[0]
+    image = segment_breast(image, crop=crop)[0]
 
     image = cv2.resize(image, (2000, 2600), interpolation=cv2.INTER_AREA)
 
