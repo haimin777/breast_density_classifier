@@ -66,10 +66,9 @@ def normalize_single_image(image):
     image -= np.mean(image)
     image /= np.std(image)
     #image /= np.amax(image)# np.std(image)
-    
-
-    
+       
     print np.amax(image)
+    return image
     
     
 def segment_breast(img, low_int_threshold=.05, crop=False):
@@ -126,7 +125,7 @@ def load_dcm_images(image_path):
     
 
     #image = image.astype(np.float32)
-    normalize_single_image(image)
+    image = normalize_single_image(image)
     print 'normilized', np.amax(image)
     image = np.expand_dims(image, axis=0)
     image = np.expand_dims(image, axis=3)
