@@ -64,18 +64,20 @@ def inference(parameters, verbose=True):
             session_config = tf.ConfigProto(device_count={'GPU': 0})
         else:
             raise RuntimeError(parameters['device_type'])
-
-        with tf.Session(config=session_config) as session:
+            
+    with tf.Session(config=session_config) as session:
             session.run(tf.global_variables_initializer())
 
             # loads the pre-trained parameters if it's provided
             optimistic_restore(session, parameters['model_path'])
 
             # load input images
-            datum_l_cc = utils.load_images(parameters['image_path'], 'L-CC')
-            datum_r_cc = utils.load_images(parameters['image_path'], 'R-CC')
-            datum_l_mlo = utils.load_images(parameters['image_path'], 'L-MLO')
-            datum_r_mlo = utils.load_images(parameters['image_path'], 'R-MLO')
+            dcm_paths = [os.path.join(parameters['image_path'], dcm_file) for dcm_file in os.listdir(parameters['image_path'])]
+
+            datum_l_cc = utils.load_dcm_images(dcm_paths[0])
+            datum_r_cc = utils.load_dcm_images(dcm_paths[1])
+            datum_l_mlo = utils.load_dcm_images(dcm_paths[2])
+            datum_r_mlo = utils.load_dcm_images(dcm_paths[3])
 
             # populate feed_dict for TF session
             # No dropout and no gaussian noise in inference
@@ -85,6 +87,7 @@ def inference(parameters, verbose=True):
                 feed_dict_by_model[x_r_cc] = datum_r_cc
                 feed_dict_by_model[x_l_mlo] = datum_l_mlo
                 feed_dict_by_model[x_r_mlo] = datum_r_mlo
+
             elif parameters["model_type"] == 'histogram':
                 feed_dict_by_model[x] = utils.histogram_features_generator(
                     [datum_l_cc, datum_r_cc, datum_l_mlo, datum_r_mlo],
