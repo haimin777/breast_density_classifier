@@ -64,8 +64,7 @@ def normalize_single_image(image):
     print np.amax(image)
     #image -= np.mean(image)
     
-    #image /= np.std(image)
-    image = image/np.amax(image)
+    image /= np.amax(image)# np.std(image)
     print np.amax(image)
     
     
