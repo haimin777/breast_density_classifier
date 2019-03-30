@@ -1,5 +1,7 @@
 import numpy as np
 from scipy import misc
+import pydicom as pyd
+import cv2
 
 
 def histogram_features_generator(image_batch, parameters):
