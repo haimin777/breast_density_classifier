@@ -64,6 +64,46 @@ def normalize_single_image(image):
     image -= np.mean(image)
     image /= np.std(image)
     
+    
+def segment_breast(img, low_int_threshold=.05, crop=False):
+        '''Perform breast segmentation
+        Args:
+            low_int_threshold([float or int]): Low intensity threshold to 
+                    filter out background. It can be a fraction of the max 
+                    intensity value or an integer intensity value.
+            crop ([bool]): Whether or not to crop the image.
+        Returns:
+            An image of the segmented breast.
+        NOTES: the low_int_threshold is applied to an image of dtype 'uint8',
+            which has a max value of 255.
+        '''
+        # Create img for thresholding and contours.
+        img_8u = (img.astype('float32')/img.max()*255).astype('uint8')
+        if low_int_threshold < 1.:
+            low_th = int(img_8u.max()*low_int_threshold)
+        else:
+            low_th = int(low_int_threshold)
+        _, img_bin = cv2.threshold(
+            img_8u, low_th, maxval=255, type=cv2.THRESH_BINARY)
+        ver = (cv2.__version__).split('.')
+        if int(ver[0]) < 3:
+            contours, _ = cv2.findContours(
+                img_bin.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        else:
+            _, contours, _ = cv2.findContours(
+                img_bin.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        cont_areas = [ cv2.contourArea(cont) for cont in contours ]
+        idx = np.argmax(cont_areas)  # find the largest contour, i.e. breast.
+        breast_mask = cv2.drawContours(
+            np.zeros_like(img_bin), contours, idx, 255, -1)  # fill the contour.
+        # segment the breast.
+        img_breast_only = cv2.bitwise_and(img, img, mask=breast_mask)
+        x, y, w, h = cv2.boundingRect(contours[idx])
+        if crop:
+            img_breast_only = img_breast_only[y:y+h, x:x+w]
+        return img_breast_only, (x,y,w,h)
+    
+    
 def load_dcm_images(image_path):
     """
     Function that loads and preprocess input images
@@ -73,6 +113,8 @@ def load_dcm_images(image_path):
     """
     image = pyd.dcmread(image_path).pixel_array
     image = cv2.resize(image, (2000, 2600), interpolation=cv2.INTER_AREA)
+    image = segment_breast(image)[0]
+
 
     image = image.astype(np.float32)
     normalize_single_image(image)
