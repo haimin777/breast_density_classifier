@@ -120,6 +120,7 @@ def load_dcm_images(image_path):
 
     image = image.astype(np.float32)
     normalize_single_image(image)
+    image = -image
     image = np.expand_dims(image, axis=0)
     image = np.expand_dims(image, axis=3)
 
