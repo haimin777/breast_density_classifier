@@ -71,7 +71,8 @@ def normalize_single_image(image):
     return image
     
     
-def segment_breast(img, low_int_threshold=.05, crop=False):
+def segment_breast(img, low_int_threshold=.05, crop=True):
+    print 'cropped'
         '''Perform breast segmentation
         Args:
             low_int_threshold([float or int]): Low intensity threshold to 
@@ -126,7 +127,7 @@ def load_dcm_images(image_path):
 
     image = image.astype(np.float32)
     image = normalize_single_image(image)
-    print 'normilized', np.amax(image)
+    print 'normalized', np.amax(image)
     image = np.expand_dims(image, axis=0)
     image = np.expand_dims(image, axis=3)
 
