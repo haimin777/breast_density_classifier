@@ -119,14 +119,14 @@ def load_dcm_images(image_path):
     :return: Batch x Height x Width x Channels array
     """
     image = pyd.dcmread(image_path).pixel_array
-    #image = segment_breast(image)[0]
+    image = segment_breast(image)[0]
 
     image = cv2.resize(image, (2000, 2600), interpolation=cv2.INTER_AREA)
 
     
 
     image = image.astype(np.float32)
-    #image = normalize_single_image(image)
+    image = normalize_single_image(image)
     print 'normalized', np.amax(image)
     image = np.expand_dims(image, axis=0)
     image = np.expand_dims(image, axis=3)
