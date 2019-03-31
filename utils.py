@@ -71,8 +71,7 @@ def normalize_single_image(image):
     return image
     
     
-def segment_breast(img, low_int_threshold=.05, crop=True):
-    print 'cropped'
+def segment_breast(img, low_int_threshold=.05, crop=True):    
         '''Perform breast segmentation
         Args:
             low_int_threshold([float or int]): Low intensity threshold to 
@@ -107,6 +106,7 @@ def segment_breast(img, low_int_threshold=.05, crop=True):
         img_breast_only = cv2.bitwise_and(img, img, mask=breast_mask)
         x, y, w, h = cv2.boundingRect(contours[idx])
         if crop:
+            print 'cropped'
             img_breast_only = img_breast_only[y:y+h, x:x+w]
         return img_breast_only, (x,y,w,h)
     
