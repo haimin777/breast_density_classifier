@@ -62,7 +62,7 @@ def normalize_single_image(image):
     :param image: numpy array
     """
     print np.amax(image)
-    image = image.astype('float64')
+    #image = image.astype('float64')
     image -= np.mean(image)
     image /= np.std(image)
     #image /= np.amax(image)# np.std(image)
@@ -124,7 +124,7 @@ def load_dcm_images(image_path):
 
     
 
-    #image = image.astype(np.float32)
+    image = image.astype(np.float32)
     image = normalize_single_image(image)
     print 'normilized', np.amax(image)
     image = np.expand_dims(image, axis=0)
