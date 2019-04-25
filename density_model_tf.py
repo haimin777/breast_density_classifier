@@ -65,7 +65,9 @@ def inference(parameters, verbose=True):
             session_config = tf.ConfigProto(device_count={'GPU': 0})
         else:
             raise RuntimeError(parameters['device_type'])
-            
+        
+        saver = tf.train.Saver()
+        
         with tf.Session(config=session_config) as session:
             session.run(tf.global_variables_initializer())
 
@@ -97,7 +99,9 @@ def inference(parameters, verbose=True):
 
             # run the session for a prediction
             prediction_density = session.run(y_prediction_density, feed_dict=feed_dict_by_model)
-
+            
+            saver.save(session, '/content/drive/My Drive/M-project/saved_models/my_restore/breast_model')
+            
             if verbose:
                 # nicely prints out the predictions
                 print('Density prediction:\n' +
