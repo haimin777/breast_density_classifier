@@ -61,13 +61,11 @@ def normalize_single_image(image):
     Normalize image in-place
     :param image: numpy array
     """
-    print np.amax(image)
     #image = image.astype('float64')
     image -= np.mean(image)
     image /= np.std(image)
     #image /= np.amax(image)# np.std(image)
        
-    print np.amax(image), np.std(image)
     return image
     
     
@@ -96,7 +94,7 @@ def segment_breast(img, low_int_threshold=.05, crop=True):
             contours, _ = cv2.findContours(
                 img_bin.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         else:
-            _, contours, _ = cv2.findContours(
+            contours, _ = cv2.findContours(
                 img_bin.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         cont_areas = [ cv2.contourArea(cont) for cont in contours ]
         idx = np.argmax(cont_areas)  # find the largest contour, i.e. breast.
@@ -106,7 +104,7 @@ def segment_breast(img, low_int_threshold=.05, crop=True):
         img_breast_only = cv2.bitwise_and(img, img, mask=breast_mask)
         x, y, w, h = cv2.boundingRect(contours[idx])
         if crop:
-            print 'cropped'
+            print('cropped')
             img_breast_only = img_breast_only[y:y+h, x:x+w]
         return img_breast_only, (x,y,w,h)
     
@@ -127,7 +125,7 @@ def load_dcm_images(image_path):
 
     image = image.astype(np.float32)
     image = normalize_single_image(image)
-    print 'normalized', np.amax(image)
+    #print 'normalized', np.amax(image)
     image = np.expand_dims(image, axis=0)
     image = np.expand_dims(image, axis=3)
 
