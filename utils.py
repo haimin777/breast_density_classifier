@@ -116,7 +116,7 @@ def load_dcm_images(image_path):
     :param view: L-CC / R-CC / L-MLO / R-MLO
     :return: Batch x Height x Width x Channels array
     """
-    image = pyd.dcmread(image_path).pixel_array
+    image = pyd.dcmread(image_path, force=True).pixel_array
     image = segment_breast(image)[0]
 
     image = cv2.resize(image, (2000, 2600), interpolation=cv2.INTER_AREA)
